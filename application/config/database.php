@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => getenv('DB_HOST'),
-	'username' => getenv('DB_USER'),
-	'password' => getenv('DB_PASS'),
-	'database' => getenv('DB_NAME'),
+	'hostname' => 'srv1365.hstgr.io',
+	'username' => 'u816573993_root',
+	'password' => '8t{/Rk[/91_NH#Lz{qKT',
+	'database' => 'u816573993_syhrl',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

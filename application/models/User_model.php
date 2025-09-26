@@ -3,20 +3,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User_model extends CI_Model
 {
-    // public function insert_user($data)
-    // {
-    //     return $this->db->insert('users', $data);
-    // }
+    public function insert_user($data)
+    {
+        return $this->db->insert('users', $data);
+    }
 
-    // public function is_unique_email($email)
-    // {
-    //     return $this->db->where('email', $email)->count_all_results('users') === 0;
-    // }
+    public function is_unique_email($email)
+    {
+        return $this->db->where('email', $email)->count_all_results('users') === 0;
+    }
 
-    // public function is_unique_username($username)
-    // {
-    //     return $this->db->where('username', $username)->count_all_results('users') === 0;
-    // }
+    public function is_unique_username($username)
+    {
+        return $this->db->where('username', $username)->count_all_results('users') === 0;
+    }
 
     protected $table = 'users';
 
