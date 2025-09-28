@@ -67,17 +67,17 @@
                         <table id="datatablesSimple">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Airwaybill</th>
                                     <th>Created At</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Airwaybill</th>
                                     <th>Created At</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </tfoot>
@@ -85,11 +85,17 @@
                                 <?php if (!empty($orders)): ?>
                                     <?php foreach ($orders as $o): ?>
                                         <tr>
-                                            <td><?= $o['id'] ?></td>
                                             <td><?= $o['airwaybill'] ?></td>
                                             <td><?= $o['created_at'] ?></td>
+                                            <td><?= $o['status'] ?></td>
                                             <td>
-                                                <a href="<?= site_url('orders/detail/' . $o['id']) ?>" class="btn btn-sm btn-primary">Detail</a>
+                                                <a href="<?= site_url('order/detail/' . $o['id']) ?>" class="btn btn-sm btn-primary">Detail</a>
+                                                <?php
+                                                $shipment_image = $this->db->get_where('shipment_images', ['order_id' => $o['id']])->row_array();
+                                                if (!$shipment_image):
+                                                ?>
+                                                    <a href="<?= site_url('order/upload_shipment_form/' . $o['id']) ?>" class="btn btn-sm btn-warning">Upload Image</a>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

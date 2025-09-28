@@ -129,30 +129,65 @@
                         <div class="col-md-4">
                             <label class="form-label">Connote Reff</label>
                             <input type="text" name="connote_reff" value="-" class="form-control">
-                        </div>
+                            </div>
 
-                        <!-- Shipment Details -->
-                        <div class="col-md-3">
-                            <label class="form-label">Shipment Item Name</label>
-                            <input type="text" name="shipment_details[0][name]" value="Jacket" class="form-control">
-                        </div>
+                            <!-- Shipment Details -->
+                            <div id="shipment-details-container" class="row">
+                                <div class="shipment-detail-group col-md-12 mb-3">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Shipment Item Name</label>
+                                            <input type="text" name="shipment_details[0][name]" value="Jacket" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Shipment Item Category</label>
+                                            <input type="text" name="shipment_details[0][category]" value="Garment" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Shipment Item Qty</label>
+                                            <input type="number" name="shipment_details[0][qty]" value="1" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Shipment Item Price</label>
+                                            <input type="number" name="shipment_details[0][price]" value="20" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <button type="button" class="btn btn-success" id="add-shipment-item">Tambah Item</button>
+                            </div>
 
-                        <div class="col-md-3">
-                            <label class="form-label">Shipment Item Category</label>
-                            <input type="text" name="shipment_details[0][category]" value="Garment" class="form-control">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label">Shipment Item Qty</label>
-                            <input type="number" name="shipment_details[0][qty]" value="1" class="form-control">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label">Shipment Item Price</label>
-                            <input type="number" name="shipment_details[0][price]" value="20" class="form-control">
-                        </div>
-
-                        <div class="col-12">
+                            <script>
+                            let shipmentIndex = 1;
+                            document.getElementById('add-shipment-item').addEventListener('click', function() {
+                                const container = document.getElementById('shipment-details-container');
+                                const group = document.createElement('div');
+                                group.className = 'shipment-detail-group col-md-12 mb-3';
+                                group.innerHTML = `
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Shipment Item Name</label>
+                                            <input type="text" name="shipment_details[${shipmentIndex}][name]" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Shipment Item Category</label>
+                                            <input type="text" name="shipment_details[${shipmentIndex}][category]" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Shipment Item Qty</label>
+                                            <input type="number" name="shipment_details[${shipmentIndex}][qty]" value="1" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Shipment Item Price</label>
+                                            <input type="number" name="shipment_details[${shipmentIndex}][price]" value="0" class="form-control">
+                                        </div>
+                                    </div>
+                                `;
+                                container.appendChild(group);
+                                shipmentIndex++;
+                            });
+                            </script>      <div class="col-12"></div>
                             <button type="submit" class="btn btn-primary">Submit Order</button>
                         </div>
                     </form>

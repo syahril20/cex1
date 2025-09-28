@@ -100,28 +100,14 @@ class Shipment extends CI_Controller
             'created_at' => gmdate('Y-m-d H:i:s', time() + 7 * 3600),
             'updated_at' => gmdate('Y-m-d H:i:s', time() + 7 * 3600),
             'created_by' => $this->session->userdata('user')->username,
-            'airwaybill' => $result['data']['airwaybill']
+            'airwaybill' => $result['data']['airwaybill'],
+            'status'     => 'Created'
         ];
         $this->db->insert('orders', $orderData);
         redirect('/order');
     }
 
-    private function generate_uuid()
-    {
-        return sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xFFFF),
-            mt_rand(0, 0xFFFF),
-            mt_rand(0, 0xFFFF),
-            mt_rand(0, 0xFFF) | 0x4000,
-            mt_rand(0, 0x3FFF) | 0x8000,
-            mt_rand(0, 0xFFFF),
-            mt_rand(0, 0xFFFF),
-            mt_rand(0, 0xFFFF)
-        );
-    }
-
-        public function upload_shipment()
+    public function upload_shipment()
     {
         $airwaybill = $this->input->post('airwaybill');
         $file       = $_FILES['filename']['tmp_name'];
@@ -133,11 +119,62 @@ class Shipment extends CI_Controller
         }
 
         try {
+            /**
+             * ===========================
+             * MODE DUMMY (aktif sekarang)
+             * ===========================
+             */
+            $upload_path = FCPATH . 'uploads/';
+            if (!is_dir($upload_path)) {
+                mkdir($upload_path, 0777, true);
+            }
+
+            $new_file_name = uniqid() . '_' . $file_name;
+            $destination   = $upload_path . $new_file_name;
+
+            if (!move_uploaded_file($file, $destination)) {
+                throw new Exception("Gagal menyimpan file ke server lokal.");
+            }
+
+            // Dummy response mirip API eksternal
+            $dummyResponse = [
+                "status" => 200,
+                "msg"    => "Upload berhasil (dummy)",
+                "data"   => [
+                    "airwaybill" => $airwaybill,
+                    "file_name"  => $new_file_name,
+                    "file_path"  => base_url('uploads/' . $new_file_name),
+                    "file_type"  => mime_content_type($destination),
+                    "uploaded_by" => "system"
+                ]
+            ];
+
+            // Simpan ke DB
+            $insert = [
+                'id'          => $this->generate_uuid(),
+                "order_id"    => $this->input->post('order_id'),
+                "airwaybill"  => $airwaybill,
+                "file_name"   => $new_file_name,
+                "file_path"   => '/uploads/' . $new_file_name,
+                "file_type"   => mime_content_type($destination),
+                "uploaded_by" => "system"
+            ];
+
+            $this->db->insert('shipment_images', $insert);
+
+            $this->session->set_flashdata('success', 'Upload berhasil (dummy): ' . json_encode($dummyResponse));
+
+
+            /**
+             * ===========================
+             * MODE REAL (gunakan ini jika mau hit API eksternal)
+             * ===========================
+             */
+            /*
             $client = new Client();
-            // payload ke API eksternal
             $response = $client->request('POST', 'https://dev.office.cexsystem.com/v2/service/shipment/upload_shipment_image', [
                 'headers' => [
-                    'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50IjoiQ0EyNjI3OSIsImdlbmVyYXRlRGF0ZSI6IjIwMjUtMDktMjYgMTQ6MDU6MTUiLCJleHBpcmVkRGF0ZSI6IjIwMjUtMTAtMDMgMTQ6MDU6MTUifQ.C_mM8BSCJP3ClQMIiLWJ2zbzBCXw-inySIdbY47OcwY',
+                    'Authorization' => 'Bearer <JWT_TOKEN>'
                 ],
                 'multipart' => [
                     [
@@ -154,11 +191,39 @@ class Shipment extends CI_Controller
 
             $result = json_decode($response->getBody()->getContents(), true);
 
-            $this->session->set_flashdata('success', 'Upload berhasil: ' . json_encode($result));
-        } catch (\Exception $e) {
+            // Simpan hasil ke DB
+            $insert = [
+                "order_id"    => null,
+                "airwaybill"  => $airwaybill,
+                "file_name"   => $result['data']['file_name'],
+                "file_path"   => $result['data']['file_path'],
+                "file_type"   => $result['data']['file_type'] ?? 'unknown',
+                "uploaded_by" => "system"
+            ];
+
+            $this->db->insert('shipment_images', $insert);
+
+            $this->session->set_flashdata('success', 'Upload berhasil (real API): ' . json_encode($result));
+            */
+        } catch (Exception $e) {
             $this->session->set_flashdata('error', 'Upload gagal: ' . $e->getMessage());
         }
 
-        redirect('uploadshipment');
+        redirect('order');
+    }
+
+    private function generate_uuid()
+    {
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFF) | 0x4000,
+            mt_rand(0, 0x3FFF) | 0x8000,
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFFF)
+        );
     }
 }
