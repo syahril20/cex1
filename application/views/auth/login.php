@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,13 +46,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 Password</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="password.html">Forgot Password?</a>
+                                            <!-- <a class="small" href="password.html">Forgot Password?</a> -->
                                             <button class="btn btn-primary" type="submit">Login</button>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="register.html">Need an account? Sign up!</a></div>
+                                    <div class="small"><a href="<?= site_url('register') ?>">Need an account? Sign up!</a></div>
                                 </div>
                             </div>
                         </div>
@@ -60,6 +60,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </main>
         </div>
+        
         <div id="layoutAuthentication_footer">
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
@@ -77,41 +78,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
             <?php if ($this->session->flashdata('error')): ?>
-            <div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
-                aria-atomic="true" data-bs-delay="5000">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        <?= $this->session->flashdata('error'); ?>
+                <div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
+                    aria-atomic="true" data-bs-delay="5000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <?= $this->session->flashdata('error'); ?>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
                 </div>
-            </div>
             <?php endif; ?>
         </div>
 
         <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-            toastElList.forEach(function(toastEl) {
-                new bootstrap.Toast(toastEl).show();
+            document.addEventListener('DOMContentLoaded', function() {
+                var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                toastElList.forEach(function(toastEl) {
+                    new bootstrap.Toast(toastEl).show();
+                });
             });
-        });
         </script>
-
-
-
-
-
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
     <script src="<?= base_url('assets/js/scripts.js') ?>"></script>
-
-
-
-
 
 </body>
 

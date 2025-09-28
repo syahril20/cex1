@@ -19,14 +19,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <body class="sb-nav-fixed">
     <?php $this->load->view('layout/navbar'); ?>
 
-    <?php $datas = [
-        'role' => $data['role'],
-        'username' => $data['username'],
-        'page' => 'Dashboard'
-    ];
+    <?php 
+    // $datas = [
+    //     'role' => $data['role'],
+    //     'username' => $data['username'],
+    //     'page' => 'Dashboard'
+    // ];
 
-    $this->load->view('layout/sidenav', ['datas' => $datas]);
-    ?>
+    $this->load->view('layout/sidenav');
+    ?> 
 
 </body>
 

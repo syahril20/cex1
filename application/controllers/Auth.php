@@ -1,11 +1,24 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * (No code provided in the selection.)
+ * @property CI_DB $db
+ * @property CI_Session $session
+ * @property User_model $User_model
+ * @property JwtAuth $jwtauth
+ * @property CI_Input $input
+ * Please provide the code selection you want documented.
+ */
 class Auth extends CI_Controller
 {
     public function register()
     {
         $roles = $this->db->get('roles')->result();
+        $token = $this->session->userdata('token');
+        if ($token) {
+            redirect('/');
+        }
         $this->load->view('auth/register', ['roles' => $roles]);
     }
 
@@ -62,7 +75,7 @@ class Auth extends CI_Controller
 
         if ($this->User_model->insert_user($data)) {
             $this->session->set_flashdata('success', 'Register berhasil, silakan login.');
-            redirect('auth/login');
+            redirect('/login');
         } else {
             $this->session->set_flashdata('error', 'Register gagal.');
             redirect('auth/register');
@@ -124,13 +137,16 @@ class Auth extends CI_Controller
 
         // Simpan token di session
         $this->session->set_userdata('token', $token);
-        $this->session->set_userdata('user_id', $user->id);
+        $this->session->set_userdata('user', $user);
+        // $this->session->set_userdata('role', $role);
 
+        // $this->load->view('dashboard');
         redirect('/');  // atau halaman utama
     }
 
     // Logout user
-    public function logout() {
+    public function logout()
+    {
         $token = $this->session->userdata('token');
 
         // Hapus token dari database jika pakai JWT token
@@ -147,5 +163,4 @@ class Auth extends CI_Controller
         // Redirect ke halaman login
         redirect('/login');
     }
-
 }

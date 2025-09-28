@@ -29,7 +29,7 @@ class User_model extends CI_Model
 
     public function get_by_email($email)
     {
-        $this->db->select('users.id, users.email, users.password, roles.name as role');
+        $this->db->select('users.id, users.username, users.email, users.password, roles.name as role, roles.code');
         $this->db->from('users');
         $this->db->join('roles', 'roles.id = users.role_id', 'left');
         $this->db->where('users.email', $email);

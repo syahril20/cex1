@@ -10,7 +10,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Dashboard</title>
+    <title>Order</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?= base_url('assets/css/styles.css') ?>">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -19,16 +19,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <body class="sb-nav-fixed">
     <?php $this->load->view('layout/navbar'); ?>
 
-    <?php $datas = [
-        'role' => $data['role'],
-        'username' => $data['username'],
-        'page' => 'Dashboard'
-    ];
-
-    $this->load->view('layout/sidenav', ['datas' => $datas]);
+    <?php
+    $this->load->view('layout/sidenav', ['page'=> 'Order']);
     ?>
 
 </body>
-
 
 </html>
